@@ -1,0 +1,23 @@
+Escolha o formato de saída do seu arquivo: 
+
+Formatos de áudio 
+1: mp3 
+2: wav 
+3: ogg 
+4: flac 
+5: m4a 
+
+Formatos de vídeo 
+6: mp4 
+7: avi 
+8: mkv 
+9: webm 
+10: mov 
+11: wmv 
+
+Formatos de imagem 
+12: jpg 
+13: png 
+14: gif 
+15: svg 
+16: webp
