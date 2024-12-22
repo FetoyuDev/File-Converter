@@ -17,7 +17,7 @@ case $lang in
 ;;
 "5") echo "Work In Progress" && exit
 ;;
-"6") echo "Work In Progress" && exit
+"6") sh ./config/tool/pt-br.sh
 ;;
 "7") echo "Work In Progress" && exit
 esac
