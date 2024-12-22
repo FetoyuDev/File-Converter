@@ -1,6 +1,6 @@
 Please Choose Your Language:
 1: English
-2: Spanish
+2: Español
 3: French
 4: Turkish
 5: Italian

@@ -9,7 +9,7 @@ read -p "> " lang
 case $lang in
 "1") sh ./config/tool/en-us.sh
 ;;
-"2") echo "Work In Progress" && exit
+"2") sh ./config/tool/es-mx.sh
 ;;
 "3") echo "Work In Progress" && exit
 ;;
