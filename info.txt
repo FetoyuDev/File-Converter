@@ -1,8 +1,8 @@
 Please Choose Your Language:
 1: English
-2: Español
-3: French
-4: Turkish
-5: Italian
+2: Spanish
+3: French (Working In Progress)
+4: Turkish (Working In Progress)
+5: Italian (Working In Progress)
 6: Portuguese
-7: Hindi
+7: Hindi (Working In Progress)
