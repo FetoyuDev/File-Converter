@@ -1,0 +1,103 @@
+{
+  "app": {
+    "title": "Conversor de Arquivos",
+    "version": "Versão {version}",
+    "description": "Conversor de arquivos multiplataforma com suporte a temas"
+  },
+  "menu": {
+    "file": "Arquivo",
+    "new": "Novo",
+    "open": "Abrir",
+    "save": "Salvar",
+    "exit": "Sair",
+    "edit": "Editar",
+    "preferences": "Preferências",
+    "view": "Visualizar",
+    "themes": "Temas",
+    "language": "Idioma",
+    "help": "Ajuda",
+    "about": "Sobre",
+    "documentation": "Documentação"
+  },
+  "themes": {
+    "amoled_dark": "Escuro AMOLED",
+    "dark": "Escuro",
+    "light": "Claro",
+    "ocean_blue": "Azul Oceano",
+    "sunset": "Pôr do Sol",
+    "forest_green": "Verde Floresta"
+  },
+  "buttons": {
+    "add_files": "Adicionar Arquivos",
+    "add_folders": "Adicionar Pastas",
+    "remove": "Remover",
+    "remove_all": "Remover Todos",
+    "convert": "Converter",
+    "cancel": "Cancelar",
+    "ok": "OK",
+    "apply": "Aplicar",
+    "browse": "Procurar",
+    "clear": "Limpar"
+  },
+  "media_controls": {
+    "play": "Reproduzir",
+    "pause": "Pausar",
+    "stop": "Parar",
+    "next": "Próximo",
+    "previous": "Anterior",
+    "loop_one": "Repetir Um",
+    "loop_all": "Repetir Todos",
+    "loop_off": "Sem Repetição",
+    "random_on": "Aleatório Ligado",
+    "random_off": "Aleatório Desligado",
+    "zoom_in": "Aumentar Zoom",
+    "zoom_out": "Diminuir Zoom",
+    "zoom_reset": "Resetar Zoom"
+  },
+  "file_list": {
+    "name": "Nome",
+    "type": "Tipo",
+    "size": "Tamanho",
+    "format": "Formato",
+    "status": "Status",
+    "output_format": "Formato de Saída",
+    "no_files": "Nenhum arquivo adicionado",
+    "files_selected": "{count} arquivo(s) selecionado(s)"
+  },
+  "status": {
+    "ready": "Pronto",
+    "converting": "Convertendo...",
+    "completed": "Concluído",
+    "failed": "Falhou",
+    "queued": "Na Fila",
+    "paused": "Pausado"
+  },
+  "search": {
+    "placeholder": "Buscar arquivos...",
+    "no_results": "Nenhum resultado encontrado",
+    "filter_by_type": "Filtrar por tipo",
+    "filter_by_status": "Filtrar por status"
+  },
+  "logs": {
+    "title": "Logs de Conversão",
+    "clear": "Limpar Logs",
+    "export": "Exportar Logs",
+    "level_info": "Info",
+    "level_warning": "Aviso",
+    "level_error": "Erro",
+    "auto_scroll": "Rolagem Automática"
+  },
+  "dialogs": {
+    "confirm_remove": "Tem certeza que deseja remover este(s) arquivo(s)?",
+    "confirm_remove_all": "Tem certeza que deseja remover todos os arquivos?",
+    "conversion_complete": "Conversão concluída com sucesso!",
+    "conversion_failed": "Falha na conversão: {error}",
+    "select_output_folder": "Selecionar pasta de saída"
+  },
+  "errors": {
+    "file_not_found": "Arquivo não encontrado: {path}",
+    "invalid_format": "Formato inválido: {format}",
+    "conversion_error": "Erro na conversão: {message}",
+    "no_files_selected": "Nenhum arquivo selecionado"
+  }
+}
