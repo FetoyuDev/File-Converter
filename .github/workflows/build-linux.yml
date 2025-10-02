@@ -1,0 +1,44 @@
+name: Build Linux Executable
+on:
+  workflow_dispatch:
+  workflow_call:
+    outputs:
+      artifact-name:
+        description: 'Name of the uploaded artifact'
+        value: ${{ jobs.build.outputs.artifact-name }}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      artifact-name: ${{ steps.upload.outputs.artifact-name }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+      
+      - name: Build executable with PyInstaller
+        run: |
+          pyinstaller --onefile --name FileConverter-Linux gui/main.py
+      
+      - name: Make executable
+        run: |
+          chmod +x dist/FileConverter-Linux
+      
+      - name: Upload artifact
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: FileConverter-Linux
+          path: dist/FileConverter-Linux
+          retention-days: 1
