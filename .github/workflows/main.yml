@@ -1,0 +1,72 @@
+name: Build and Release
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+jobs:
+  build-windows:
+    uses: ./.github/workflows/build-windows.yml
+  
+  build-linux:
+    uses: ./.github/workflows/build-linux.yml
+  
+  create-release:
+    needs: [build-windows, build-linux]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: FileConverter-Windows
+          path: ./artifacts/windows
+      
+      - name: Download Linux artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: FileConverter-Linux
+          path: ./artifacts/linux
+      
+      - name: Get version
+        id: version
+        run: |
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+          else
+            VERSION="dev-$(date +'%Y%m%d-%H%M%S')"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          name: Release ${{ steps.version.outputs.version }}
+          body: |
+            ## File Converter GUI Release
+            
+            ### Downloads
+            - **Windows**: FileConverter-Windows.exe
+            - **Linux**: FileConverter-Linux
+            
+            ### Installation
+            
+            **Windows:**
+            1. Download FileConverter-Windows.exe
+            2. Run the executable
+            
+            **Linux:**
+            1. Download FileConverter-Linux
+            2. Make it executable: `chmod +x FileConverter-Linux`
+            3. Run: `./FileConverter-Linux`
+          files: |
+            ./artifacts/windows/FileConverter-Windows.exe
+            ./artifacts/linux/FileConverter-Linux
+          draft: false
+          prerelease: false
