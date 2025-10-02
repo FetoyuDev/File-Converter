@@ -1,5 +1,4 @@
 name: Build Windows Executable
-
 on:
   workflow_dispatch:
   workflow_call:
@@ -7,7 +6,6 @@ on:
       artifact-name:
         description: 'Name of the uploaded artifact'
         value: ${{ jobs.build.outputs.artifact-name }}
-
 jobs:
   build:
     runs-on: windows-latest
