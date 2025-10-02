@@ -1,0 +1,13 @@
+# File Converter GUI - Python Requirements
+
+# GUI Framework - Cross-platform support (Windows & Linux)
+PySide6>=6.6.0
+
+# Image processing
+Pillow>=10.0.0
+
+# Video/Audio processing wrapper
+ffmpeg-python>=0.2.0
+
+# Additional utilities
+psutil>=5.9.0  # System monitoring for progress bars
