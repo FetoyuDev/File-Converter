@@ -1,0 +1,80 @@
+/* gui/themes/chroma_neon.qss */
+
+/* Fundo principal escuro */
+QWidget {
+    background-color: #121212;
+    color: #E8E8E8;
+}
+
+/* Labels com texto neon multicolorido */
+QLabel {
+    color: qlineargradient(
+        spread:pad, x1:0, y1:0, x2:1, y2:0,
+        stop:0 #00ffe7,
+        stop:0.33 #ff00c8,
+        stop:0.66 #fff600,
+        stop:1 #04ff00
+    );
+    font-weight: bold;
+    font-size: 14pt;
+    letter-spacing: 1px;
+}
+
+/* Botões neon */
+QPushButton {
+    background-color: #232323;
+    color: #00ffea;
+    border: 2px solid #00ffea;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 12pt;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+/* Glow ao passar mouse */
+QPushButton:hover {
+    border: 2px solid #ff6eff;
+    color: #ff6eff;
+    box-shadow: 0 0 12px #ff6eff, 0 0 20px #00ffea inset;
+    background-color: #181e24;
+}
+
+/* QLineEdit neon 
+QLineEdit {
+    background: #181818;
+    color: #7bff00;
+    border: 2px solid #05fdfa;
+    border-radius: 8px;
+    padding: 6px;
+}
+QLineEdit:focus {
+    border: 2px solid #ec04ff;
+    box-shadow: 0 0 8px #ec04ff;
+}
+
+/* QComboBox neon */
+QComboBox {
+    background-color: #181818;
+    color: #f8ff01;
+    border: 2px solid #01ffe9;
+    border-radius: 8px;
+    padding: 5px;
+    font-weight: bold;
+}
+QComboBox:hover {
+    border: 2px solid #f800ff;
+    box-shadow: 0 0 10px #f800ff;
+}
+QComboBox QAbstractItemView {
+    background: #232323;
+    color: #00ffea;
+    selection-background-color: #ff05de;
+    selection-color: #ffffff;
+}
+
+/* Borda neon em toda seleção */
+QWidget:selected, QItemSelection {
+    border: 2px solid #fff600;
+    box-shadow: 0 0 6px #fff600;
+}
