@@ -6,6 +6,7 @@ on:
       artifact-name:
         description: 'Name of the uploaded artifact'
         value: ${{ jobs.build.outputs.artifact-name }}
+
 jobs:
   build:
     runs-on: windows-latest
@@ -15,6 +16,66 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      
+      - name: Verify required files and directories
+        shell: pwsh
+        run: |
+          Write-Host "Checking required directories and files..."
+          $MissingFiles = 0
+          
+          # Check GUI directories
+          @('gui/themes', 'gui/i18n', 'gui/components', 'gui/utils') | ForEach-Object {
+            if (-not (Test-Path $_)) {
+              Write-Host "❌ Missing directory: $_"
+              $MissingFiles = 1
+            } else {
+              Write-Host "✅ Found directory: $_"
+            }
+          }
+          
+          # Check main files
+          @('gui/main.py', 'gui/main_window.py', 'requirements.txt') | ForEach-Object {
+            if (-not (Test-Path $_)) {
+              Write-Host "❌ Missing file: $_"
+              $MissingFiles = 1
+            } else {
+              Write-Host "✅ Found file: $_"
+            }
+          }
+          
+          # Check theme files
+          @('gui/themes/light.qss', 'gui/themes/dark.qss', 'gui/themes/amoled_dark.qss', 'gui/themes/ocean_blue.qss', 'gui/themes/sunset.qss', 'gui/themes/forest_green.qss', 'gui/themes/chroma_neon.qss', 'gui/themes/theme_manager.py') | ForEach-Object {
+            if (-not (Test-Path $_)) {
+              Write-Host "⚠️  Missing theme file: $_"
+            } else {
+              Write-Host "✅ Found theme: $_"
+            }
+          }
+          
+          # Check i18n files
+          @('gui/i18n/en_US.json', 'gui/i18n/pt_BR.json', 'gui/i18n/es_ES.json', 'gui/i18n/translator.py', 'gui/i18n/languages.json') | ForEach-Object {
+            if (-not (Test-Path $_)) {
+              Write-Host "⚠️  Missing i18n file: $_"
+            } else {
+              Write-Host "✅ Found i18n file: $_"
+            }
+          }
+          
+          # Check component files
+          @('gui/components/file_selector.py', 'gui/components/format_selector.py', 'gui/components/preview_panel.py', 'gui/components/log_viewer.py', 'gui/components/media_controls.py', 'gui/components/search_bar.py') | ForEach-Object {
+            if (-not (Test-Path $_)) {
+              Write-Host "⚠️  Missing component: $_"
+            } else {
+              Write-Host "✅ Found component: $_"
+            }
+          }
+          
+          if ($MissingFiles -eq 1) {
+            Write-Host "❌ Build aborted: Critical files/directories are missing!"
+            exit 1
+          }
+          
+          Write-Host "✅ All critical files and directories verified!"
       
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -29,7 +90,13 @@ jobs:
       
       - name: Build executable with PyInstaller
         run: |
-          pyinstaller --onefile --windowed --name FileConverter-Windows gui/main.py
+          pyinstaller --onefile --windowed --name FileConverter-Windows `
+            --add-data "gui/themes;gui/themes" `
+            --add-data "gui/i18n;gui/i18n" `
+            --hidden-import PyQt6.QtCore `
+            --hidden-import PyQt6.QtGui `
+            --hidden-import PyQt6.QtWidgets `
+            gui/main.py
       
       - name: Upload artifact
         id: upload
