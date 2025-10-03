@@ -1,9 +1,11 @@
 name: Build and Release
+
 on:
   workflow_dispatch:
   push:
     tags:
       - 'v*'
+
 jobs:
   build-windows:
     uses: ./.github/workflows/build-windows.yml
@@ -20,6 +22,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for changelog generation
       
       - name: Download Windows artifact
         uses: actions/download-artifact@v4
@@ -33,7 +37,7 @@ jobs:
           name: FileConverter-Linux
           path: ./artifacts/linux
       
-      - name: Get version
+      - name: Get version and generate changelog
         id: version
         run: |
           if [[ $GITHUB_REF == refs/tags/* ]]; then
@@ -42,29 +46,65 @@ jobs:
             VERSION="dev-$(date +'%Y%m%d-%H%M%S')"
           fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
+          
+          # Generate simple changelog from recent commits
+          echo "## What's Changed" > CHANGELOG.md
+          echo "" >> CHANGELOG.md
+          
+          # Get commits since last tag or all commits if no previous tag
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          
+          if [ -z "$PREV_TAG" ]; then
+            echo "### Initial Release" >> CHANGELOG.md
+            echo "" >> CHANGELOG.md
+            git log --pretty=format:"- %s (%h)" --max-count=20 >> CHANGELOG.md
+          else
+            echo "### Changes since $PREV_TAG" >> CHANGELOG.md
+            echo "" >> CHANGELOG.md
+            git log $PREV_TAG..HEAD --pretty=format:"- %s (%h)" >> CHANGELOG.md
+          fi
+          
+          echo "" >> CHANGELOG.md
+          echo "" >> CHANGELOG.md
+          echo "### Features" >> CHANGELOG.md
+          echo "- ✨ Multi-language support (English, Portuguese, Spanish)" >> CHANGELOG.md
+          echo "- 🎨 7 Beautiful themes (Light, Dark, AMOLED Dark, Ocean Blue, Sunset, Forest Green, Chroma Neon)" >> CHANGELOG.md
+          echo "- 📦 File conversion with preview" >> CHANGELOG.md
+          echo "- 📊 Comprehensive logging" >> CHANGELOG.md
+          echo "- 🔍 Advanced search functionality" >> CHANGELOG.md
+          echo "" >> CHANGELOG.md
+          echo "### System Requirements" >> CHANGELOG.md
+          echo "- **Windows**: Windows 10 or later" >> CHANGELOG.md
+          echo "- **Linux**: Ubuntu 20.04+ or equivalent" >> CHANGELOG.md
+          echo "- **Python**: 3.11+ (if running from source)" >> CHANGELOG.md
+      
+      - name: Verify artifacts
+        run: |
+          echo "Verifying build artifacts..."
+          
+          if [ ! -f "./artifacts/windows/FileConverter-Windows.exe" ]; then
+            echo "❌ Windows executable not found!"
+            exit 1
+          fi
+          
+          if [ ! -f "./artifacts/linux/FileConverter-Linux" ]; then
+            echo "❌ Linux executable not found!"
+            exit 1
+          fi
+          
+          echo "✅ All artifacts verified!"
+          
+          # Show file sizes
+          echo "Artifact sizes:"
+          ls -lh ./artifacts/windows/FileConverter-Windows.exe
+          ls -lh ./artifacts/linux/FileConverter-Linux
       
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.version.outputs.version }}
           name: Release ${{ steps.version.outputs.version }}
-          body: |
-            ## File Converter GUI Release
-            
-            ### Downloads
-            - **Windows**: FileConverter-Windows.exe
-            - **Linux**: FileConverter-Linux
-            
-            ### Installation
-            
-            **Windows:**
-            1. Download FileConverter-Windows.exe
-            2. Run the executable
-            
-            **Linux:**
-            1. Download FileConverter-Linux
-            2. Make it executable: `chmod +x FileConverter-Linux`
-            3. Run: `./FileConverter-Linux`
+          body_path: CHANGELOG.md
           files: |
             ./artifacts/windows/FileConverter-Windows.exe
             ./artifacts/linux/FileConverter-Linux
