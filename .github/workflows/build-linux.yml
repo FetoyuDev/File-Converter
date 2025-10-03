@@ -6,6 +6,7 @@ on:
       artifact-name:
         description: 'Name of the uploaded artifact'
         value: ${{ jobs.build.outputs.artifact-name }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,6 +16,65 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      
+      - name: Verify required files and directories
+        run: |
+          echo "Checking required directories and files..."
+          MISSING_FILES=0
+          
+          # Check GUI directories
+          for dir in gui/themes gui/i18n gui/components gui/utils; do
+            if [ ! -d "$dir" ]; then
+              echo "❌ Missing directory: $dir"
+              MISSING_FILES=1
+            else
+              echo "✅ Found directory: $dir"
+            fi
+          done
+          
+          # Check main files
+          for file in gui/main.py gui/main_window.py requirements.txt; do
+            if [ ! -f "$file" ]; then
+              echo "❌ Missing file: $file"
+              MISSING_FILES=1
+            else
+              echo "✅ Found file: $file"
+            fi
+          done
+          
+          # Check theme files
+          for theme in gui/themes/light.qss gui/themes/dark.qss gui/themes/amoled_dark.qss gui/themes/ocean_blue.qss gui/themes/sunset.qss gui/themes/forest_green.qss gui/themes/chroma_neon.qss gui/themes/theme_manager.py; do
+            if [ ! -f "$theme" ]; then
+              echo "⚠️  Missing theme file: $theme"
+            else
+              echo "✅ Found theme: $theme"
+            fi
+          done
+          
+          # Check i18n files
+          for lang in gui/i18n/en_US.json gui/i18n/pt_BR.json gui/i18n/es_ES.json gui/i18n/translator.py gui/i18n/languages.json; do
+            if [ ! -f "$lang" ]; then
+              echo "⚠️  Missing i18n file: $lang"
+            else
+              echo "✅ Found i18n file: $lang"
+            fi
+          done
+          
+          # Check component files
+          for component in gui/components/file_selector.py gui/components/format_selector.py gui/components/preview_panel.py gui/components/log_viewer.py gui/components/media_controls.py gui/components/search_bar.py; do
+            if [ ! -f "$component" ]; then
+              echo "⚠️  Missing component: $component"
+            else
+              echo "✅ Found component: $component"
+            fi
+          done
+          
+          if [ $MISSING_FILES -eq 1 ]; then
+            echo "❌ Build aborted: Critical files/directories are missing!"
+            exit 1
+          fi
+          
+          echo "✅ All critical files and directories verified!"
       
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -29,7 +89,13 @@ jobs:
       
       - name: Build executable with PyInstaller
         run: |
-          pyinstaller --onefile --name FileConverter-Linux gui/main.py
+          pyinstaller --onefile --name FileConverter-Linux \
+            --add-data "gui/themes:gui/themes" \
+            --add-data "gui/i18n:gui/i18n" \
+            --hidden-import PyQt6.QtCore \
+            --hidden-import PyQt6.QtGui \
+            --hidden-import PyQt6.QtWidgets \
+            gui/main.py
       
       - name: Make executable
         run: |
