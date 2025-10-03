@@ -1,3 +1,10 @@
-# Media Controls Component
-# Provides dynamic media playback controls (play/pause/stop/next/prev/loop/random/zoom)
-# Adapts control visibility based on media type
+# gui/components/media_controls.py
+from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout
+
+class MediaControls(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        layout = QVBoxLayout()
+        label = QLabel("Componente: Controles de Mídia")
+        layout.addWidget(label)
+        self.setLayout(layout)
