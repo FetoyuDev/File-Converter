@@ -1,4 +1,5 @@
-# File Converter GUI - Especificações de Desenvolvimento
+# File Converter
+- Especificações de Desenvolvimento
 
 ## Visão Geral
 Esta branch contém a implementação da interface gráfica (GUI) multiplataforma para o File Converter, desenvolvida em Python usando PySide6 para compatibilidade com Windows e Linux.
