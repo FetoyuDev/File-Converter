@@ -1,0 +1,8 @@
+{
+  "_comment": "Language metadata for File Converter",
+  "available_languages": [
+    {"code": "en_US", "name": "English", "native_name": "English"},
+    {"code": "pt_BR", "name": "Portuguese (Brazil)", "native_name": "Português (Brasil)"},
+    {"code": "es_ES", "name": "Spanish", "native_name": "Español"}
+  ]
+}
